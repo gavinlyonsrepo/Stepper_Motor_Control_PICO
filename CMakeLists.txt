@@ -11,13 +11,14 @@ set(CMAKE_CXX_STANDARD 20)
 
 #enable exceptions
 set(PICO_CXX_ENABLE_EXCEPTIONS 1)
+
 # Creates a pico-sdk subdirectory in our project for the libraries
 pico_sdk_init()
 
 # turn on all compiler warnings 
 add_compile_options(-Wall)
 
-# Tell CMake where to find the executable source file #0
+# Tell CMake where to find the executable source file
 add_executable(${PROJECT_NAME} 
   examples/BYJ_48/main.cpp
   #examples/L298N_NEMA/main.cpp

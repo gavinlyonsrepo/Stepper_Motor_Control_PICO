@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
- * @brief test file Stepper motor control lbrary for Raspberry Pi Pico.
- * @details 28BYJ-48 unipolar Motor, ULN2003 stepper motor controller 
+ * @brief test file Stepper motor control library for Raspberry Pi Pico.
+			28BYJ-48 unipolar Motor, ULN2003 stepper motor controller.
  */
 #include <vector>
 #include "pico/stdlib.h"
@@ -26,7 +26,7 @@ int main()
 {
 	Setup();
 	// Run motor test 1
-	// Define varibles for motor run test: 360 turn clockwise
+	// Define variables for motor run test: 360 turn clockwise
 	float stepDelay = 0.002F;
 	int steps = 512;
 	bool ccwise = false;
@@ -36,7 +36,7 @@ int main()
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 2
-	// Define varibles for motor run: 180 turn counter cloclkwise and 2 second init delay
+	// Define variables for motor run: 180 turn counter clockwise and 2 second init delay
 	stepDelay = 0.002F;
 	steps = 256;
 	ccwise = true;
@@ -46,7 +46,7 @@ int main()
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 3
-	// Define varibles for motor run test 3: 180 degree turn step delay slower
+	// Define variables for motor run test 3: 180 degree turn step delay slower
 	stepDelay = 0.01F;
 	steps = 256;
 	ccwise = true;
@@ -56,7 +56,7 @@ int main()
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 4
-	// Define varibles for motor run test:  360 turn full step
+	// Define variables for motor run test:  360 turn full step
 	stepDelay = 0.01F;
 	steps = 512;
 	ccwise = false;
@@ -66,7 +66,7 @@ int main()
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::fullStep, initDelay);
 
 	// Run motor test 5
-	// Define varibles for motor run test: 360 turn , wave drive
+	// Define variables for motor run test: 360 turn , wave drive
 	stepDelay = 0.01F;
 	steps = 512;
 	ccwise = false;

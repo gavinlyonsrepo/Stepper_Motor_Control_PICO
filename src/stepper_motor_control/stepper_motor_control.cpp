@@ -66,11 +66,11 @@ void StepMotorControl::motorStop()
  * @param steptype Step mode (half-step, full-step, or wave drive).
  * @param initdelay Initial delay (in seconds) before starting movement.
  * @return 
- * 		 0 for success 
- *		-1 _stopMotor flag was set true during motor loop.
- * 		-2 An unknown exception occured.
- *		-3 Bad input step number by user.
-		-4 Unknown Step mode type.
+ *		-#  0 for success.
+ *		-# -1 stopMotor flag was set true during motor loop.
+ *		-# -2 An unknown exception occurred.
+ *		-# -3 Bad input step number by user.
+ *		-# -4 Unknown Step mode type.
  */
 int StepMotorControl::motorRun(float wait, int steps,
 		   bool ccwise, bool verbose, StepMode_e steptype,

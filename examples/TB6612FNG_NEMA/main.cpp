@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
- * @brief test file Stepper motor control lbrary for Raspberry Pi Pico.
- * @details Bipolar Nema stepper motor with TB6612FNG_NEMA
+ * @brief test file Stepper motor control library for Raspberry Pi Pico.
+			Bipolar Nema stepper motor with TB6612FNG_NEMA
  */
 #include <vector>
 #include "pico/stdlib.h"
@@ -9,7 +9,7 @@
 #include "stepper_motor_control/stepper_motor_control.hpp"
 
 // motor setup 
-// Define varibles for motor control
+// Define variables for motor control
 std::vector<uint> motorPins = {0, 1, 2, 3}; // GPIO pins list
 // Create motor instance
 StepMotorControl motor(StepMotorControl::TB6612FNG_NEMA, motorPins);
@@ -26,7 +26,7 @@ int main()
 {
 	Setup();
 	// Run motor test 1
-	// Define varibles for motor run test: 360 turn clockwise
+	// Define variables for motor run test: 360 turn clockwise
 	float stepDelay = 0.1F;
 	int steps = 50;
 	bool ccwise = false;
