@@ -1,7 +1,7 @@
 /**
  * @file main.cpp
  * @brief test file Stepper motor control library for Raspberry Pi Pico.
-			Bipolar Nema stepper motor with MC1508
+			Bipolar Nema stepper motor with MX1508
  */
 #include <vector>
 #include "pico/stdlib.h"
@@ -12,7 +12,7 @@
 // Define variables for motor control
 std::vector<uint> motorPins = {0, 1, 2, 3}; // GPIO pins list
 // Create motor instance
-StepMotorControl motor(StepMotorControl::MC1508_NEMA, motorPins);
+StepMotorControl motor(StepMotorControl::MX1508_NEMA, motorPins);
 
 // Emergency stop pushbutton, optional.
 #define BUTTON_PIN 15  // GPIO pin for button
@@ -54,7 +54,7 @@ void Setup(void)
 	// Initialize standard I/O for debugging
 	stdio_init_all(); // usb 38400 baud
 	busy_wait_ms(1000);
-	std::cout << "Motor test MC1508 controller, bipolar Nema motor, Started." << std::endl; 
+	std::cout << "Motor test MX1508 controller, bipolar Nema motor, Started." << std::endl; 
 	//init motor 
 	motor.motorInit();
 

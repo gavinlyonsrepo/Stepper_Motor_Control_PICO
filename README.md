@@ -21,6 +21,7 @@ There is an example file for each motor in examples. Select which one is complie
 The example files are in example folder. To build the one you want, 
 edit the Cmaketxt file add_executable(${PROJECT_NAME} section, 
 comment in one example file path and one only. 
+Code is commented for Doxygen API generation. 
 
 ### Stepper motors
 
@@ -29,7 +30,7 @@ comment in one example file path and one only.
 |Unipolar 28BYJ-48| ULN2003 driver module| BYJ_48|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/28BYJ.md)| 
 |Bipolar Nema| TB6612FNG Dual Driver Carrier| TB6612FNG_NEMA |[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11TB6612FNG.md) |
 |Bipolar Nema| L298N H-Bridge controller module| L298N_NEMA|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11L298N.md) |
-|Bipolar Nema| MX1508 Motor controller module| MC1508_NEMA|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11MC150X.md) |
+|Bipolar Nema| MX1508 Motor controller module| MX1508_NEMA|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11MX150X.md) |
 |Bipolar Nema(untested)| DV8833 Motor controller module| TODO| TODO |
 
 

@@ -22,7 +22,7 @@ add_compile_options(-Wall)
 add_executable(${PROJECT_NAME} 
   examples/BYJ_48/main.cpp
   #examples/L298N_NEMA/main.cpp
-  #examples/MC1508_NEMA/main.cpp
+  #examples/MX1508_NEMA/main.cpp
   #examples/TB6612FNG_NEMA/main.cpp
 )
 

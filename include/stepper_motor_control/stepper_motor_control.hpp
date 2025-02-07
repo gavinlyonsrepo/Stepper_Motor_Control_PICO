@@ -28,7 +28,7 @@ public:
 	{
 		BYJ_48,  ///< 28BYJ-48 unipolar Motor (stepper motor controller ULN2003 )
 		L298N_NEMA,   ///< Bipolar Nema motor, L298N -based Stepper Motor controller
-		MC1508_NEMA, ///< Bipolar Nema motor, MC1508 based Stepper Motor controller
+		MX1508_NEMA, ///< Bipolar Nema motor, MX1508 based Stepper Motor controller
 		TB6612FNG_NEMA, ///< Bipolar Nema motor, TB6612FNG based Stepper Motor controller
 		UNKNOWN ///< Unknown motor type
 	};

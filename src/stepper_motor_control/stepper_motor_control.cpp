@@ -192,7 +192,7 @@ void StepMotorControl::displayDegree(int steps)
 
 	break;
 	case L298N_NEMA: 
-	case MC1508_NEMA: 
+	case MX1508_NEMA: 
 	case TB6612FNG_NEMA:
 		_degreeValue = 7.20F; 
 		std::cout << "Size of turn in degrees = " << ((float)steps * _degreeValue) << std::endl;
