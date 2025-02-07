@@ -1,5 +1,18 @@
-# Stepper_motor_Control_PICO
+# Stepper_Motor_Control_PICO
 
-TODO Documentation
+## Overview
+
+TODO
+
+## Supported Components
+
+TODO
+
+## Output 
+
+![ op ](https://github.com/gavinlyonsrepo/Stepper_Motor_Control_PICO/blob/main/extra/images/output.png)
+
+
+
 
 

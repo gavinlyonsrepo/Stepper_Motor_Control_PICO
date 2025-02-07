@@ -2,6 +2,7 @@
 /**
  * @file stepper_motor_control.cpp
  * @brief Stepper motor control implementation for Raspberry Pi Pico.
+ * @details URL :: https://github.com/gavinlyonsrepo/Motor_Control_PICO.git
  */
 
 #include "../../include/stepper_motor_control/stepper_motor_control.hpp"
@@ -16,7 +17,7 @@ StepMotorControl::StepMotorControl(MotorType_e motorType, std::vector<uint> gpio
 	_motorType = motorType; 
 	_gpioPins = gpioPins;
 	_stopMotor = false;
-	_degreeValue = 1.422222F;
+	_degreeValue = 0.0F;
 }
 
 /**
@@ -64,14 +65,20 @@ void StepMotorControl::motorStop()
  * @param verbose Enables detailed output if true.
  * @param steptype Step mode (half-step, full-step, or wave drive).
  * @param initdelay Initial delay (in seconds) before starting movement.
+ * @return 
+ * 		 0 for success 
+ *		-1 _stopMotor flag was set true during motor loop.
+ * 		-2 An unknown exception occured.
+ *		-3 Bad input step number by user.
+		-4 Unknown Step mode type.
  */
-void StepMotorControl::motorRun(float wait, int steps,
+int StepMotorControl::motorRun(float wait, int steps,
 		   bool ccwise, bool verbose, StepMode_e steptype,
 		   float initdelay) {
 	// Ensure that step count is valid
 	if (steps < 0) {
 		std::cout << "Error 1: motorRun: Step number must be greater than 0" << std::endl; 
-		return;
+		return -3;
 	}
 
 	// Reset stop flag and apply initial delay before movement starts
@@ -102,7 +109,7 @@ void StepMotorControl::motorRun(float wait, int steps,
 		default: {
 			// Invalid step mode error
 			std::cout << "Error 2: motorRun : Unknown step type (half, full, or wave)" << std::endl; 
-			return;
+			return -4;
 		}
 		}
 
@@ -137,7 +144,7 @@ void StepMotorControl::motorRun(float wait, int steps,
 		{
 			motorStop();
 			std::cout << "Stop Button pressed." << std::endl;
-			return;
+			return -1;
 		} 
 	}
 	catch(const std::exception& e)
@@ -145,7 +152,7 @@ void StepMotorControl::motorRun(float wait, int steps,
 		// Handle any exceptions, stop the motor, and display the error
 		motorStop();
 		std::cerr << "An exception has occurred in MotorRun : " << e.what() << '\n';
-		return;
+		return -2;
 	}
 
 	// Ensure the motor is stopped after completing the step sequence
@@ -155,38 +162,58 @@ void StepMotorControl::motorRun(float wait, int steps,
 	if (verbose) {
 		std::cout << "\nVerbose Details::" << std::endl;
 		std::cout << "Motor type enum no = " << +_motorType  << std::endl; 
+		displayGPIO();
 		std::cout << std::defaultfloat << std::setprecision(6);
 		std::cout << "Initial delay = " << initdelay  << std::endl; 
-		std::cout << "GPIO pins = ";
-		for (auto pin : _gpioPins) std::cout << pin << " ";
-		std::cout  << std::endl; 
 		std::cout << "Wait time = " << wait  << std::endl; 
 		std::cout << "Number of step sequences = " << steps  << std::endl; 
 		std::cout << "Size of step sequence = " << stepSequence.size()  << std::endl; 
 		std::cout << "Number of steps = " << steps * stepSequence.size()  << std::endl; 
-		displayDegree();
-		std::cout << "Size of turn in degrees = " << ((float)steps / _degreeValue) << std::endl; 
+		displayDegree(steps);
 		std::cout << "Counter clockwise = " << (ccwise ? "true" : "false")  << std::endl; 
 		std::cout << "Verbose = " << (verbose ? "true" : "false")  << std::endl; 
-		std::cout << "Steptype enum no= " << +steptype  << std::endl; 
+		std::cout << "Steptype enum no = " << +steptype  << std::endl; 
 	}
+	return 0;
 }
 
 
 /**
- * @brief Displays degree values based on motor type.
+ * @brief Displays degree values based on motor type. 
+ * @details for Calculation size of turn in degrees for verbose reporting
  */
-void StepMotorControl::displayDegree(void)
+void StepMotorControl::displayDegree(int steps)
 {
 	switch (_motorType)
 	{
-	case BYJ48: _degreeValue = 1.422222F; break;
-	case LN298:  _degreeValue = 7.20F; break;
+	case BYJ_48: 
+		_degreeValue = 1.422222F; 
+		std::cout << "Size of turn in degrees = " << ((float)steps / _degreeValue) << std::endl;
+
+	break;
+	case L298N_NEMA: 
+	case MC1508_NEMA: 
+	case TB6612FNG_NEMA:
+		_degreeValue = 7.20F; 
+		std::cout << "Size of turn in degrees = " << ((float)steps * _degreeValue) << std::endl;
+	break;
+	case UNKNOWN:
 	default:{
-		std::cout << "Error displayDegree : Unknown Motor Type"  << _motorType << std::endl;
-		_degreeValue = 1.422222F;
+		std::cout << "Info : displayDegree : Unknown Motor Type"  << _motorType << std::endl;
+		_degreeValue = 0.0F;
 		}
 	}
+}
+
+/**
+ * @brief Displays motor GPIO pins 
+ * @details used for verbose reporting
+ */
+void StepMotorControl::displayGPIO(void)
+{
+std::cout << "GPIO pins = ";
+for (auto pin : _gpioPins) std::cout << pin << " ";
+std::cout  << std::endl; 
 }
 
 /**

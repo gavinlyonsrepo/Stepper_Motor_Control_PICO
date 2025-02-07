@@ -19,7 +19,10 @@ add_compile_options(-Wall)
 
 # Tell CMake where to find the executable source file #0
 add_executable(${PROJECT_NAME} 
-  examples/stepper_motor_control/main.cpp
+  examples/BYJ_48/main.cpp
+  #examples/L298N_NEMA/main.cpp
+  #examples/MC1508_NEMA/main.cpp
+  #examples/TB6612FNG_NEMA/main.cpp
 )
 
 # Create map/bin/hex/uf2 files

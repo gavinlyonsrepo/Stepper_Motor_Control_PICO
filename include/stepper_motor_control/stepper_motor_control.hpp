@@ -1,6 +1,7 @@
 /**
  * @file stepper_motor_control.hpp
  * @brief Stepper motor control class definition for Raspberry Pi Pico.
+ * @details URL :: https://github.com/gavinlyonsrepo/Motor_Control_PICO.git
  */
 
 # pragma once
@@ -25,8 +26,11 @@ public:
 	 */
 	enum MotorType_e : uint8_t 
 	{
-		BYJ48,  ///< 28BYJ-48 Stepper Motor
-		LN298   ///< L298-based Stepper Motor
+		BYJ_48,  ///< 28BYJ-48 unipolar Motor (stepper motor controller ULN2003 )
+		L298N_NEMA,   ///< Bipolar Nema motor, L298N -based Stepper Motor controller
+		MC1508_NEMA, ///< Bipolar Nema motor, MC1508 based Stepper Motor controller
+		TB6612FNG_NEMA, ///< Bipolar Nema motor, TB6612FNG based Stepper Motor controller
+		UNKNOWN ///< Unknown motor type
 	};
 
 	/**
@@ -40,11 +44,11 @@ public:
 		waveDrive ///< Wave drive stepping mode
 	};
 
-	StepMotorControl(MotorType_e motor_type = BYJ48, std::vector<uint> gpiopins = {0 ,1 ,2 ,3});
+	StepMotorControl(MotorType_e motor_type = BYJ_48, std::vector<uint> gpiopins = {0 ,1 ,2 ,3});
 	void motorInit(void);
 	void motorDeInit(void);
 	void motorStop(void);
-	void motorRun(float wait = 0.001, int steps = 512,
+	int  motorRun(float wait = 0.001, int steps = 512,
 			   bool ccwise = false, bool verbose = false, StepMode_e steptype = halfStep,
 			   float initdelay = 0.001);
 	
@@ -52,13 +56,11 @@ public:
 	void setMotorStop(bool);
 
 private:
-	/**
-	 * @brief Sets the degree value based on motor type.
-	 */
-	void displayDegree(void);
+	void displayDegree(int steps);
+	void displayGPIO(void);
 
 	float _degreeValue = 0.0F;   ///< Degree per step value
-	MotorType_e  _motorType;     ///< Motor type (BYJ48 or LN298)
+	MotorType_e  _motorType;     ///< Motor type
 	bool _stopMotor;             ///< Motor stop flag
 	std::vector<uint> _gpioPins; ///< GPIO pins used for motor control
 };
