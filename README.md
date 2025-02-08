@@ -22,11 +22,14 @@ The example files are in example folder. To build the one you want,
 edit the Cmaketxt file add_executable(${PROJECT_NAME} section, 
 comment in one example file path and one only. 
 Code is commented for Doxygen API generation. 
+Code for an optional push button to ground which can be used as software 
+stop on motor movement included in example files. 
 
 ### Stepper motors
 
 | Motor tested | Motor controller| example file |Help File URL |
 | ----- | ----- | ----- | ---- |
+|Bipolar Nema| A3967 Easy Driver| A3967_NEMA|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11A3967Easy.md)| 
 |Unipolar 28BYJ-48| ULN2003 driver module| BYJ_48|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/28BYJ.md)| 
 |Bipolar Nema| TB6612FNG Dual Driver Carrier| TB6612FNG_NEMA |[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11TB6612FNG.md) |
 |Bipolar Nema| L298N H-Bridge controller module| L298N_NEMA|[Link](https://github.com/gavinlyonsrepo/RpiMotorLib/blob/master/extra/Documentation/Nema11L298N.md) |

@@ -9,7 +9,7 @@
 #include "stepper_motor_control/stepper_motor_control.hpp"
 
 // motor setup 
-// Define varibles for motor control
+// Define variables for motor control
 std::vector<uint> motorPins = {2, 3, 4, 5}; // GPIO pins list
 // Create motor instance
 StepMotorControl motor(StepMotorControl::BYJ_48, motorPins);
