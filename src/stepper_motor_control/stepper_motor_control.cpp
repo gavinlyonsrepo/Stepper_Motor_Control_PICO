@@ -121,13 +121,13 @@ void StepMotorControl::motorStop()
  *		-# StepMotorControl_StepValue Bad input step number by user.
  *		-# StepMotorControl_StepModeType Unknown Step mode type.
  */
-StepMotorControlCommon::StepMotorControlError_e StepMotorControl::motorRun(uint32_t stepDelay, int steps,
+StepMotorControlCommon::ReturnCode_e StepMotorControl::motorRun(uint32_t stepDelay, int steps,
 		   bool ccwise, bool verbose, StepMode_e steptype,
 		   uint32_t initdelay) {
 	// Ensure that step count is valid
 	if (steps < 0) {
-		std::cout << "Error 1: motorRun: Step number must be greater than 0" << std::endl; 
-		return StepMotorControl_StepValue;
+		std::cerr << "Error 1: motorRun: Step number must be greater than 0" << std::endl; 
+		return StepValueIncorrect;
 	}
 
 	// Reset stop flag and apply initial delay before movement starts
@@ -158,7 +158,7 @@ StepMotorControlCommon::StepMotorControlError_e StepMotorControl::motorRun(uint3
 		default: {
 			// Invalid step mode error
 			std::cout << "Error 2: motorRun : Unknown step type (half, full, or wave)" << std::endl; 
-			return StepMotorControl_StepModeType;
+			return UnknownStepModeType;
 		}
 		}
 		// Reverse the sequence if counterclockwise rotation is requested
@@ -192,7 +192,7 @@ StepMotorControlCommon::StepMotorControlError_e StepMotorControl::motorRun(uint3
 		{
 			motorStop();
 			std::cout << "Stop Button pressed." << std::endl;
-			return StepMotorControl_MotorStopFlag;
+			return MotorStopFlagSet;
 		} 
 	}
 	catch(const std::exception& e)
@@ -200,7 +200,7 @@ StepMotorControlCommon::StepMotorControlError_e StepMotorControl::motorRun(uint3
 		// Handle any exceptions, stop the motor, and display the error
 		motorStop();
 		std::cerr << "An exception has occurred in MotorRun : " << e.what() << '\n';
-		return StepMotorControl_UnknownError;
+		return UnknownException;
 	}
 
 	// Ensure the motor is stopped after completing the step sequence
@@ -222,7 +222,7 @@ StepMotorControlCommon::StepMotorControlError_e StepMotorControl::motorRun(uint3
 		std::cout << "Verbose = " << (verbose ? "true" : "false")  << std::endl; 
 		std::cout << "Steptype enum no = " << +steptype  << std::endl; 
 	}
-	return StepMotorControl_Success;
+	return Success;
 }
 
 
@@ -274,7 +274,7 @@ void StepMotorControl::displayGPIO(void)
  * @param dirPin GPIO for direction control
  * @param stepPin  GPIO for step control
  */
-StepMotorControlEasy::StepMotorControlEasy(uint dirPin, uint stepPin)
+StepMotorControlEasy::StepMotorControlEasy(uint8_t dirPin, uint8_t stepPin)
 {
 	_directionPin = dirPin;
 	_stepPin = stepPin;
@@ -286,19 +286,16 @@ StepMotorControlEasy::StepMotorControlEasy(uint dirPin, uint stepPin)
  * @brief Constructor for StepMotorControlEasy.
  * @param dirPin GPIO for direction control
  * @param stepPin  GPIO for step control
- * @param msPins GPIO for resolution contorl 2 off MS1 and MS2
+ * @param msPins GPIO for resolution control 2 off MS1 and MS2
  */
-StepMotorControlEasy::StepMotorControlEasy(uint dirPin, uint stepPin, int msPins[2])
+StepMotorControlEasy::StepMotorControlEasy(uint8_t dirPin, uint8_t stepPin, std::array<int, 2> msPins)
 {
 	_directionPin = dirPin;
 	_stepPin = stepPin;
 	_stopMotor = false;
 	_modePinsEnable = true;
-	if (_modePinsEnable)
-	{
-		_modePins[0] = msPins[0];
-		_modePins[1] = msPins[1];
-	}
+	_modePins[0] = msPins[0];
+	_modePins[1] = msPins[1];
 }
 
 /**
@@ -357,21 +354,21 @@ void StepMotorControlEasy::motorStop()
  * @param verbose Enables detailed output if true.
  * @param steptype Step mode Full half 1/4 1/8
  * @param initdelay Initial delay (in mS) before starting movement.
- * @return  StepMotorControlError_e enum 
- *		-# StepMotorControl_Success for success.
- *		-# StepMotorControl_MotorStopFlag  stopMotor flag was set true during motor loop.
- *		-# StepMotorControl_UnknownError An unknown exception occurred.
- *		-# StepMotorControl_StepValue Bad input step number by user.
- *		-# StepMotorControl_StepModeType invalid Step mode type.
+ * @return  ReturnCode_e enum 
+ *		-# Success for success.
+ *		-# MotorStopFlagSet  stopMotor flag was set true during motor loop.
+ *		-# UnknownException An unknown exception occurred.
+ *		-# StepValueIncorrect Bad input step number by user.
+ *		-# UnknownStepModeType invalid Step mode type.
  */
- StepMotorControlCommon::StepMotorControlError_e StepMotorControlEasy::motorMove(uint32_t stepdelay , int steps, bool clockwise,
+ StepMotorControlCommon::ReturnCode_e StepMotorControlEasy::motorMove(uint32_t stepdelay , int steps, bool clockwise,
 				    bool verbose, std::string steptype, uint32_t  initdelay) 
 {
 	// 1. User error checks
 	// 1-1 Ensure that step count is valid
 	if (steps < 0) {
 		std::cout << "Error 1: motorMove: Step number must be greater than 0" << std::endl; 
-		return StepMotorControl_StepValue;
+		return StepValueIncorrect;
 	}
 	// 1.2 Ensure resolution type is valid
 	if (resolution.find(steptype) == resolution.end()) 
@@ -382,10 +379,8 @@ void StepMotorControlEasy::motorStop()
 			std::cerr << res.first << " ";
 		}
 		std::cerr << std::endl;
-		return StepMotorControl_StepModeType;
+		return UnknownStepModeType;
 	}
-
-
 	// 2. Setup motor
 	_stopMotor = false;
 	try 
@@ -416,7 +411,7 @@ void StepMotorControlEasy::motorStop()
 		{
 			motorStop();
 			std::cout << "Info : motorMove: Stop Button pressed." << std::endl;
-			return StepMotorControl_MotorStopFlag;
+			return MotorStopFlagSet;
 		}  
 		std::cout <<  std::endl;
 	}	
@@ -425,7 +420,7 @@ void StepMotorControlEasy::motorStop()
 		// Handle any exceptions, stop the motor, and display the error
 		motorStop();
 		std::cerr << "Error: motorMove: An exception has occurred: " << e.what() << '\n';
-		return StepMotorControl_UnknownError;
+		return UnknownException;
 	}
 	// finish happy path
 	motorStop();
@@ -439,8 +434,251 @@ void StepMotorControlEasy::motorStop()
 		std::cout << "Initial delay mS = " << initdelay << std::endl;
 		std::cout << "Size of turn in degrees = " << degree_calc(steps, steptype) << std::endl;
 	}
-	return StepMotorControl_Success;
+	return Success;
 }
 
+//################################################
+// ### StepMotorControlMicro class ###
+//################################################
 
-// EOF
+/**
+ * @brief Constructor for StepMotorControlMicro(1 of 2)
+ * @param dirPin GPIO for direction control
+ * @param stepPin  GPIO for step control
+ * @param modePins GPIO for resolution control MS1-MS3
+ * @param motorType The defined name of motor controller eg A4988 
+ */
+StepMotorControlMicro::StepMotorControlMicro(uint8_t dirPin, uint8_t stepPin, std::vector<int> modePins, std::string motorType)
+{
+	_directionPin = dirPin;
+	_stepPin = stepPin;
+	_modePinsEnable = true;
+	_motorType = motorType;
+	_modePins = modePins;
+	_stopMotor = false;
+}
+
+/**
+ * @brief Constructor for StepMotorControlMicro.(2 of 2)
+ * @param dirPin GPIO for direction control
+ * @param stepPin  GPIO for step control
+ * @param motorType The defined name of motor controller eg A4988 
+ */
+StepMotorControlMicro::StepMotorControlMicro(uint8_t dirPin, uint8_t stepPin, std::string motorType)
+{
+	_directionPin = dirPin;
+	_stepPin = stepPin;
+	_motorType = motorType;
+	_modePinsEnable = false;
+	_stopMotor = false;
+}
+
+/**
+ * @brief Initializes the motor by setting up GPIO pins.
+ */
+void StepMotorControlMicro::motorInit(void)
+{
+	gpio_init(_directionPin);
+	gpio_set_dir(_directionPin, GPIO_OUT);
+	gpio_init(_stepPin);
+	gpio_set_dir(_stepPin, GPIO_OUT);
+	if (_modePinsEnable) 
+	{
+		for (auto& pin : _modePins)
+		{
+			gpio_init(pin);
+			gpio_set_dir(pin, GPIO_OUT);
+			gpio_put(pin, 0);
+		}
+	}
+}
+
+/**
+ * @brief Deinitialize the motor by resetting GPIO pins to default
+ */
+void StepMotorControlMicro::motorDeInit(void)
+{
+	motorStop();	
+	gpio_deinit(_directionPin);
+	gpio_deinit(_stepPin);
+	if (_modePinsEnable) 
+	{
+		for (auto& pin : _modePins)
+		{
+			gpio_deinit(pin);
+		}
+	}
+}
+
+/**
+ * @brief Stops the motor by setting all GPIO pins to low.
+ */
+void StepMotorControlMicro::motorStop() 
+{
+	gpio_put(_directionPin, 0);
+	gpio_put(_stepPin, 0);
+	if (_modePinsEnable) 
+	{
+		for (auto& pin : _modePins)
+		{
+			gpio_put(pin, 0);
+		}
+	}
+	_stopMotor = true;
+}
+
+/*!
+ * @brief Sets the step resolution (Ms1-3 GPIO pins) based on chosen motor controller and step mode type.
+ * 
+ * This function determines the correct microstepping resolution settings for a given stepper motor driver
+ * based on the motor type and the desired step mode. It sets the corresponding GPIO pins to achieve the 
+ * requested step resolution, if user has request mircostep to be hard wired it skips GPIO setting.
+ * 
+ * @param steptype The desired step mode (e.g., "Full", "Half", "1/4", etc.).
+ * @return ReturnCode_e enum:
+ *         - -# Success if the operation is successful.
+ *         - -# UnknownMotorType if  motor type is not recognized.
+ *         - -# UnknownStepModeType if  tep mode is not recognized.
+ */
+ StepMotorControlCommon::ReturnCode_e StepMotorControlMicro::resolutionSet(const std::string& steptype)
+{
+	// Define valid motor types that this function supports
+	std::array<std::string, 3> validMotorTypes = {"A4988", "DRV8825", "LV8729"};
+	// Assign resolution settings based on motor type
+	std::map<std::string, std::vector<int>> resolution;
+	if (_motorType == validMotorTypes[0]) { // A4988 driver
+		resolution = {
+			{"Full", {0, 0, 0}},
+			{"Half", {1, 0, 0}},
+			{"1/4", {0, 1, 0}},
+			{"1/8", {1, 1, 0}},
+			{"1/16", {1, 1, 1}}
+		};
+	} else if (_motorType == validMotorTypes[1]) { // DRV8825 driver
+		resolution = {
+			{"Full", {0, 0, 0}},
+			{"Half", {1, 0, 0}},
+			{"1/4", {0, 1, 0}},
+			{"1/8", {1, 1, 0}},
+			{"1/16", {0, 0, 1}},
+			{"1/32", {1, 0, 1}}
+		};
+	} else if (_motorType == validMotorTypes[2]) {  // LV8729 driver
+		resolution = {
+			{"Full", {0, 0, 0}},
+			{"Half", {1, 0, 0}},
+			{"1/4", {0, 1, 0}},
+			{"1/8", {1, 1, 0}},
+			{"1/16", {0, 0, 1}},
+			{"1/32", {1, 0, 1}},
+			{"1/64", {0, 1, 1}},
+			{"1/128", {1, 1, 1}}
+		};
+	} else { 
+		// Print error message for invalid motor type
+		std::cerr << "Error 1: resolutionSet : invalid motor_type " << _motorType << std::endl;
+		std::cerr << "Available motortypes : " ;
+		for (const auto& MotorType : validMotorTypes)
+		{
+			std::cerr << MotorType <<  " ";
+		}
+		std::cerr << std::endl;
+		return UnknownMotorType;
+	}
+	// Check if the requested step type exists in the resolution map
+	if (resolution.find(steptype) == resolution.end()) {
+		std::cerr << "Error 2: resolutionSet : invalid steptype " << steptype << std::endl;
+		std::cerr << "Available steptypes : " ;
+		for (const auto& res : resolution) 
+		{
+			std::cerr << res.first << " ";
+		}
+		std::cerr << std::endl;
+		return UnknownStepModeType;
+	}
+	// Set GPIO pins according to the resolution setting
+	if (_modePinsEnable)
+	{
+		size_t index = 0;
+		for (auto& pin : _modePins) 
+		{
+			gpio_put(pin, resolution[steptype][index++]);
+		}
+	}
+	return Success;
+}
+
+/*!
+ * @brief Runs the stepper motor with specified parameters.
+ * @param clockwise Direction of rotation (true for counterclockwise, false for clockwise).
+*  @param steptype Step mode 
+ * @param steps Number of steps to move the motor.
+ * @param stepdelay Time delay (in mS) between steps.
+ * @param verbose Enables detailed output if true.
+ * @param initdelay Initial delay (in mS) before starting movement.
+ * @return  ReturnCode_e enum 
+ *		-# Success for success.
+ *		-# MotorStopFlagSet stopMotor flag was set true during motor loop.
+ *		-# UnknownException An unknown exception occurred.
+ *		-# GenericError An error occurred in resolutionSet().
+ */
+StepMotorControlCommon::ReturnCode_e StepMotorControlMicro::motorGo(bool clockwise, const std::string& steptype, int steps, uint32_t stepdelay, bool verbose, uint32_t initdelay) 
+{
+	
+	// Ensure that step count is valid
+	if (steps < 0) {
+		std::cerr << "Error 1: motorRun: Step number must be greater than 0" << std::endl; 
+		return StepValueIncorrect;
+	}
+	// Setup motor
+	_stopMotor = false;
+	gpio_put(_directionPin, clockwise);
+	if (resolutionSet(steptype) != Success) return GenericError;
+	sleep_ms(initdelay);
+	// Step the motor
+	try
+	{
+		for (int i = 0; i < steps; i++) 
+		{
+			if (_stopMotor) break;
+			gpio_put(_stepPin, true);
+			sleep_ms(stepdelay);
+			gpio_put(_stepPin, false);
+			sleep_ms(stepdelay);
+			#ifdef debug_StepMtrCtrlLib
+				std::cout << "Steps count: " << i + 1 << "\r";
+				std::cout.flush();
+			#endif
+		}
+		// If stop flag was triggered externally, stop the motor and display message
+		if (_stopMotor)
+		{
+			motorStop();
+			std::cout << "Info : motorMove: Stop Button pressed." << std::endl;
+			return MotorStopFlagSet;
+		} 
+	}
+	catch(const std::exception& e)
+	{
+		// Handle any exceptions, stop the motor, and display the error
+		motorStop();
+		std::cerr << "Error: motorGo: An exception has occurred: " << e.what() << '\n';
+		return UnknownException;
+	}
+
+	// finish happy path
+	motorStop();
+	if (verbose)
+	{
+		std::cout << "Motor Move finished, Details:." << std::endl;
+		std::cout << "Clockwise = " << (clockwise ? "true" : "false") << std::endl;
+		std::cout << "Step Type = " << steptype << std::endl;
+		std::cout << "Number of steps = " << steps << std::endl;
+		std::cout << "Step Delay mS = " << stepdelay << std::endl;
+		std::cout << "Initial delay mS = " << initdelay << std::endl;
+		std::cout << "Size of turn in degrees = " << degree_calc(steps, steptype) << std::endl;
+	}
+	return Success;
+}
+
+// ### EOF ###

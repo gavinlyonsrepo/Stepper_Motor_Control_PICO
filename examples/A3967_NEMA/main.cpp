@@ -5,16 +5,16 @@
 	@details code for an optional push button to gnd which can be used as software 
 		stop on motor movement included. 
  */
-#include <vector>
+
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "stepper_motor_control/stepper_motor_control.hpp"
 
 // motor setup 
 // Define variables for motor control
-const uint8_t direction = 0 ; //Direction -> GPIO Pin
-const uint8_t  step = 1 ;     //Step -> GPIO Pin
-int msPins[2] = {2, 3};       //Microstep Resolution MS1-MS2 -> GPIO Pins
+uint8_t direction = 0 ; //Direction -> GPIO Pin
+uint8_t  step = 1 ;     //Step -> GPIO Pin
+std::array<int, 2> msPins = {2, 3}; //Microstep Resolution MS1-MS2 -> GPIO Pins
 
 // Create motor instance
 StepMotorControlEasy motor(direction, step, msPins);
@@ -66,14 +66,14 @@ int main()
 
 	// run motor test 5
 	// Define variables for motor run test:90 turn 1/4 step resolution
-	steps = 200;  // full 1/4 turn 800
+	steps = 200;  // full 1/8 turn 800
 	resolution = "1/4"; 
 	std::cout << "Test 5. 90 degree turn, step resolution 1/4" << std::endl;
 	motor.motorMove(stepDelay, steps, ccwise, verbose, resolution, initDelay);
 
 	// run motor test 6
 	// Define variables for motor run test:90 turn 1/8 step resolution
-	steps = 400;  // full 1/4 turn 1600
+	steps = 400;  // full 1/8 turn 1600
 	resolution = "1/8";
 	std::cout << "Test 6. 90 degree turn, step resolution 1/8" << std::endl;
 	motor.motorMove(stepDelay, steps, ccwise, verbose, resolution, initDelay);
@@ -107,7 +107,7 @@ void Setup(void)
 	gpio_set_irq_enabled_with_callback(BUTTON_PIN, GPIO_IRQ_EDGE_FALL , true, &button_callback);
 }
 
-// Interrupt callback function, [[optional 
+// Interrupt callback function, optional 
 void button_callback(uint gpio, uint32_t events) 
 {
 	motor.setMotorStop(true);

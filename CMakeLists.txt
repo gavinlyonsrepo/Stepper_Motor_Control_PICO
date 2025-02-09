@@ -19,12 +19,15 @@ pico_sdk_init()
 add_compile_options(-Wall)
 
 # Tell CMake where to find the executable source file
-add_executable(${PROJECT_NAME} 
+add_executable(${PROJECT_NAME}
   examples/BYJ_48/main.cpp
   #examples/L298N_NEMA/main.cpp
   #examples/MX1508_NEMA/main.cpp
   #examples/TB6612FNG_NEMA/main.cpp
   #examples/A3967_NEMA/main.cpp
+  #examples/A4988_NEMA/main.cpp
+  #examples/DRV8825_NEMA/main.cpp
+  #examples/LV8729_NEMA/main.cpp
 )
 
 # Create map/bin/hex/uf2 files
