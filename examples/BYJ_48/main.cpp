@@ -27,51 +27,51 @@ int main()
 	Setup();
 	// Run motor test 1
 	// Define variables for motor run test: 360 turn clockwise
-	float stepDelay = 0.002F;
+	uint32_t stepDelay = 2;
 	int steps = 512;
 	bool ccwise = false;
 	bool verbose = true;
-	float initDelay = 0.001F;
+	uint32_t initDelay = 10;
 	std::cout << "Test 1. 360 degree turn, half step." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 2
 	// Define variables for motor run: 180 turn counter clockwise and 2 second init delay
-	stepDelay = 0.002F;
+	stepDelay = 2;
 	steps = 256;
 	ccwise = true;
 	verbose = true;
-	initDelay = 2.0F;
+	initDelay = 2000;
 	std::cout << "Test 2 180 degree turn, half step, counter clockwise, init delay 2." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 3
 	// Define variables for motor run test 3: 180 degree turn step delay slower
-	stepDelay = 0.01F;
+	stepDelay = 10;
 	steps = 256;
 	ccwise = true;
 	verbose = true;
-	initDelay = 0.001F;
+	initDelay = 10;
 	std::cout << "Test 3 180 degree turn, half step, counter clockwise,  slower." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::halfStep, initDelay);
 
 	// Run motor test 4
 	// Define variables for motor run test:  360 turn full step
-	stepDelay = 0.01F;
+	stepDelay = 10;
 	steps = 512;
 	ccwise = false;
 	verbose = true;
-	initDelay = 0.01F;
+	initDelay = 10;
 	std::cout << "Test 4. 360 degree turn , full step." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::fullStep, initDelay);
 
 	// Run motor test 5
 	// Define variables for motor run test: 360 turn , wave drive
-	stepDelay = 0.01F;
+	stepDelay = 10;
 	steps = 512;
 	ccwise = false;
 	verbose = true;
-	initDelay = 0.01F;
+	initDelay = 10;
 	std::cout << "Test 5. 360 degree turn , wave drive." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::waveDrive, initDelay);
 

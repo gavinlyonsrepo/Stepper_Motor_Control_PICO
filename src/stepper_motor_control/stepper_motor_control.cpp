@@ -114,12 +114,12 @@ void StepMotorControl::motorStop()
  * @param verbose Enables detailed output if true.
  * @param steptype Step mode (half-step, full-step, or wave drive).
  * @param initdelay Initial delay (in mS) before starting movement.
- * @return  StepMotorControlError_e enum 
- *		-# StepMotorControl_Success for success.
- *		-# StepMotorControl_MotorStopFlag  stopMotor flag was set true during motor loop.
- *		-# StepMotorControl_UnknownErrorAn unknown exception occurred.
- *		-# StepMotorControl_StepValue Bad input step number by user.
- *		-# StepMotorControl_StepModeType Unknown Step mode type.
+ * @return  ReturnCode_e enum 
+ *		-# Success for success.
+ *		-# MotorStopFlag  stopMotor flag was set true during motor loop.
+ *		-# UnknownError An unknown exception occurred.
+ *		-# StepValue Bad input step number by user.
+ *		-# StepModeType Unknown Step mode type.
  */
 StepMotorControlCommon::ReturnCode_e StepMotorControl::motorRun(uint32_t stepDelay, int steps,
 		   bool ccwise, bool verbose, StepMode_e steptype,
@@ -350,7 +350,7 @@ void StepMotorControlEasy::motorStop()
  * @brief Runs the stepper motor with specified parameters.
  * @param stepdelay Time delay (in mS) between steps.
  * @param steps Number of steps to move the motor.
- * @param ccwise Direction of rotation (true for counterclockwise, false for clockwise).
+ * @param clockwise Direction of rotation (true for counterclockwise, false for clockwise).
  * @param verbose Enables detailed output if true.
  * @param steptype Step mode Full half 1/4 1/8
  * @param initdelay Initial delay (in mS) before starting movement.

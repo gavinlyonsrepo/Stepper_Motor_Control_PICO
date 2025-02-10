@@ -27,11 +27,11 @@ int main()
 	Setup();
 	// Run motor test 1
 	// Define variables for motor run test: 360 turn clockwise
-	float stepDelay = 0.1F;
+	uint32_t stepDelay = 100;
 	int steps = 50;
 	bool ccwise = false;
 	bool verbose = true;
-	float initDelay = 1.0F;
+	uint32_t initDelay = 1000;
 	std::cout << "Test 1. 360 degree turn, full step." << std::endl;
 	motor.motorRun(stepDelay, steps, ccwise, verbose, StepMotorControl::fullStep, initDelay);
 
