@@ -132,7 +132,7 @@ StepMotorControlCommon::ReturnCode_e StepMotorControl::motorRun(uint32_t stepDel
 
 	// Reset stop flag and apply initial delay before movement starts
 	_stopMotor = false;
-	sleep_ms(initdelay);
+	busy_wait_ms(initdelay);
 
 	// Define the step sequence based on the selected step mode
 	// stepSequence is a vector of vectors.
@@ -180,7 +180,7 @@ StepMotorControlCommon::ReturnCode_e StepMotorControl::motorRun(uint32_t stepDel
 					gpio_put(pin, std::find(pinList.begin(), pinList.end(), pin) != pinList.end());	
 				}
 				// Wait for the specified step duration
-				sleep_ms(stepDelay);
+				busy_wait_ms(stepDelay);
 			}
 			#ifdef debug_StepMtrCtrlLib
 			std::cout << "Steps count: " << stepsRemaining << "\r";
@@ -391,16 +391,16 @@ void StepMotorControlEasy::motorStop()
 			gpio_put(_modePins[0], resolution[steptype].first);
 			gpio_put(_modePins[1], resolution[steptype].second);
 		}
-		sleep_ms(initdelay);
+		busy_wait_ms(initdelay);
 		// 3. Step the motor
 		for (int i = 0; i < steps; i++) 
 		{
 			if (_stopMotor) break;
 
 			gpio_put(_stepPin, false);
-			sleep_ms(stepdelay);
+			busy_wait_ms(stepdelay);
 			gpio_put(_stepPin, true);
-			sleep_ms(stepdelay);
+			busy_wait_ms(stepdelay);
 			#ifdef debug_StepMtrCtrlLib
 				std::cout << "Steps count: " << i + 1 << "\r";
 				std::cout.flush();
@@ -634,7 +634,7 @@ StepMotorControlCommon::ReturnCode_e StepMotorControlMicro::motorGo(bool clockwi
 	_stopMotor = false;
 	gpio_put(_directionPin, clockwise);
 	if (resolutionSet(steptype) != Success) return GenericError;
-	sleep_ms(initdelay);
+	busy_wait_ms(initdelay);
 	// Step the motor
 	try
 	{
@@ -642,9 +642,9 @@ StepMotorControlCommon::ReturnCode_e StepMotorControlMicro::motorGo(bool clockwi
 		{
 			if (_stopMotor) break;
 			gpio_put(_stepPin, true);
-			sleep_ms(stepdelay);
+			busy_wait_ms(stepdelay);
 			gpio_put(_stepPin, false);
-			sleep_ms(stepdelay);
+			busy_wait_ms(stepdelay);
 			#ifdef debug_StepMtrCtrlLib
 				std::cout << "Steps count: " << i + 1 << "\r";
 				std::cout.flush();
