@@ -7,10 +7,10 @@
 * Title: Stepper Motor Control PICO 
 * Description: 
 
-A Raspberry pi Pico SDK C++ stepper motor library.
+A Raspberry pi Pico SDK C++ library to drive stepper motors controllers.
 The components supported are some of the most widely used by the electronic hobbyist community. 
 This is a partial port of my 'rpiMotorLib' a python raspberry pi library. 
-Not are components supported yet.
+Not all components supported yet.
 
 * URL to 'rpiMotorLib': [URL LINK](https://github.com/gavinlyonsrepo/RpiMotorLib)
 
@@ -21,12 +21,11 @@ Not are components supported yet.
 
 ## Supported Components
 
-Note: the help file links are to the aforementioned raspberry pi python port.
-The theory of operation, hardware setup and much of the software interface is the same. There is an example file for each motor in examples. To build the one you want, edit the CMakeLists.txt file add_executable(${PROJECT_NAME} section, 
+Note: the help file links below are to the aforementioned raspberry pi python port.
+The theory of operation, hardware setup and much of the software API is the same. There is an example file for each motor in examples folder. To build the one you want, edit the CMakeLists.txt file add_executable(${PROJECT_NAME} section, 
 comment in one example file path and one only. 
 Code is commented for Doxygen API generation. 
-Code for an optional push button to ground which can be used as software 
-stop on motor movement is included in the example files. 
+Code for an optional push button to ground is included in the example files, this push button can be used as a stop on motor movement.
 
 ### Stepper motors
 

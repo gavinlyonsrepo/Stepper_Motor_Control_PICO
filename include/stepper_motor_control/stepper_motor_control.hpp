@@ -35,9 +35,9 @@ class StepMotorControlCommon
 		{
 			Success,               /**< Success, Function ran without defined Error :)*/
 			StepValueIncorrect,    /**< Step Value incorrect, Bad input step number by user */
-			UnknownException,      /**< Unknown Exception was occurred */
+			UnknownException,      /**< Unknown Exception occurred */
 			UnknownStepModeType,   /**< Unknown Step mode requested */
-			MotorStopFlagSet,      /**< The motor stop flag was been set true externally */
+			MotorStopFlagSet,      /**< The motor stop flag set externally */
 			GenericError,          /**< Unknown generic error */
 			UnknownMotorType       /**< Unsupported motor type */
 		};
@@ -137,7 +137,7 @@ class StepMotorControlEasy : public StepMotorControlCommon
 
 	private:
 		uint8_t _directionPin;   /**< GPIO for direction pin  */
-		uint8_t _stepPin;        /**< GPIO for direction pin  */
+		uint8_t _stepPin;        /**< GPIO for step pin  */
 		std::array<int, 2> _modePins;     /**< Microstep Resolution MS1-MS2 -> GPIO Pins */
 		bool _modePinsEnable; /**< Microstep resolution enabled  */
 		
@@ -180,7 +180,7 @@ class StepMotorControlMicro : public StepMotorControlCommon
 		ReturnCode_e resolutionSet(const std::string& steptype);
 
 		uint8_t _directionPin;      /**< GPIO for direction pin  */
-		uint8_t _stepPin;           /**< GPIO for direction pin  */
+		uint8_t _stepPin;           /**< GPIO for step pin  */
 		std::vector<int> _modePins; /**< Microstep Resolution MS1-MS3 -> GPIO Pins */
 		std::string _motorType;     /**< Name of a supported motor */
 		bool _modePinsEnable;       /**< Microstep resolution enabled  */

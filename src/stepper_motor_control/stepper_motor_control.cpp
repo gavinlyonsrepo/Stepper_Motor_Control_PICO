@@ -118,7 +118,7 @@ void StepMotorControl::motorStop()
  *		-# Success for success.
  *		-# MotorStopFlag  stopMotor flag was set true during motor loop.
  *		-# UnknownError An unknown exception occurred.
- *		-# StepValue Bad input step number by user.
+ *		-# StepValueIncorrect Bad input step number by user.
  *		-# StepModeType Unknown Step mode type.
  */
 StepMotorControlCommon::ReturnCode_e StepMotorControl::motorRun(uint32_t stepDelay, int steps,
